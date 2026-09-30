@@ -10,181 +10,519 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #000;
-  font-family: Arial, sans-serif;
-  color: white;
+  width: 100%;
+  height: 100%;
 }
 
-.clock-area {
+body {
+  overflow: hidden;
+  background: #000;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.page {
   width: 100%;
-  max-width: 500px;
-  height: 100vh;
-  max-height: 700px;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: #000;
+}
+
+.title {
+  height: 115px;
+  width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #a34a01 0%, #654201 100%);
+  font-size: 31px;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
-h1 {
-  margin-bottom: 45px;
-  font-size: 30px;
-  letter-spacing: 1px;
-}
-
-.clock {
+.stage {
   position: relative;
-  width: 330px;
-  height: 330px;
+  width: 100%;
+  height: calc(100vh - 115px);
+  min-height: 520px;
+  max-width: 750px;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(190,100,20,.25),
+      transparent 42%
+    ),
+    linear-gradient(
+      135deg,
+      #a84b00 0%,
+      #8c4100 45%,
+      #633d08 100%
+    );
+}
+
+/* -------------------------
+   DECORATIVE BACKGROUND
+------------------------- */
+
+.pattern {
+  position: absolute;
+  width: 430px;
+  height: 430px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -45%);
+  opacity: .20;
+}
+
+.flower {
+  position: absolute;
+  width: 115px;
+  height: 115px;
+  border: 2px solid rgba(255,255,255,.42);
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg 12deg,
+      rgba(255,255,255,.15) 13deg 18deg,
+      transparent 19deg 30deg
+    );
+}
+
+.flower::before,
+.flower::after {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border: 2px solid rgba(255,255,255,.28);
   border-radius: 50%;
 }
 
-/* Clock numbers */
+.flower::after {
+  inset: 31px;
+}
+
+.f1 {
+  left: 75px;
+  top: 70px;
+}
+
+.f2 {
+  right: 70px;
+  top: 75px;
+  transform: scale(.8);
+}
+
+.f3 {
+  left: 115px;
+  bottom: 65px;
+  transform: scale(.65);
+}
+
+.f4 {
+  right: 105px;
+  bottom: 55px;
+  transform: scale(.55);
+}
+
+.center-pattern {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 160px;
+  height: 160px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+
+  background:
+    repeating-conic-gradient(
+      rgba(255,255,255,.12) 0deg 8deg,
+      transparent 8deg 16deg
+    );
+
+  border: 2px solid rgba(255,255,255,.18);
+}
+
+/* -------------------------
+   CLOCK
+------------------------- */
+
+.clock {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -47%);
+}
+
+/* numbers */
+
 .number {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 40px;
-  height: 40px;
-  margin: -20px;
-  text-align: center;
+  width: 42px;
+  height: 42px;
+
+  margin-left: -21px;
+  margin-top: -21px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: rgba(255,255,255,.40);
   font-size: 22px;
-  color: rgba(255,255,255,.55);
-  font-weight: bold;
+  font-weight: 500;
+  text-shadow: 0 0 5px rgba(255,255,255,.15);
 }
 
-.n12 { transform: rotate(0deg) translateY(-135px) rotate(0deg); }
-.n1  { transform: rotate(30deg) translateY(-135px) rotate(-30deg); }
-.n2  { transform: rotate(60deg) translateY(-135px) rotate(-60deg); }
-.n3  { transform: rotate(90deg) translateY(-135px) rotate(-90deg); }
-.n4  { transform: rotate(120deg) translateY(-135px) rotate(-120deg); }
-.n5  { transform: rotate(150deg) translateY(-135px) rotate(-150deg); }
-.n6  { transform: rotate(180deg) translateY(-135px) rotate(-180deg); }
-.n7  { transform: rotate(210deg) translateY(-135px) rotate(-210deg); }
-.n8  { transform: rotate(240deg) translateY(-135px) rotate(-240deg); }
-.n9  { transform: rotate(270deg) translateY(-135px) rotate(-270deg); }
-.n10 { transform: rotate(300deg) translateY(-135px) rotate(-300deg); }
-.n11 { transform: rotate(330deg) translateY(-135px) rotate(-330deg); }
+/* positions */
 
-/* Spider */
-.spider {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 55px;
-  height: 70px;
-  transform: translate(-50%, -50%);
-  z-index: 5;
+.n12 { transform: translateY(-145px); }
+
+.n1 {
+  transform: rotate(30deg) translateY(-145px) rotate(-30deg);
 }
 
-.body {
-  position: absolute;
-  left: 50%;
-  top: 25px;
-  transform: translateX(-50%);
-  width: 24px;
-  height: 38px;
-  background: white;
-  border-radius: 50% 50% 45% 45%;
+.n2 {
+  transform: rotate(60deg) translateY(-145px) rotate(-60deg);
 }
 
-.head {
-  position: absolute;
-  left: 50%;
-  top: 5px;
-  transform: translateX(-50%);
-  width: 25px;
-  height: 25px;
-  background: white;
-  border-radius: 50%;
+.n3 {
+  transform: rotate(90deg) translateY(-145px) rotate(-90deg);
 }
 
-.eye {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: #654201;
-  border-radius: 50%;
-  top: 12px;
+.n4 {
+  transform: rotate(120deg) translateY(-145px) rotate(-120deg);
 }
 
-.eye.left { left: 7px; }
-.eye.right { right: 7px; }
-
-/* Spider legs */
-.leg {
-  position: absolute;
-  height: 3px;
-  width: 65px;
-  background: white;
-  top: 30px;
-  transform-origin: left center;
-  border-radius: 5px;
+.n5 {
+  transform: rotate(150deg) translateY(-145px) rotate(-150deg);
 }
 
-.l1 { left: 25px; transform: rotate(145deg); }
-.l2 { left: 25px; transform: rotate(165deg); top: 38px; }
-.l3 { left: 25px; transform: rotate(195deg); top: 47px; }
-.l4 { left: 25px; transform: rotate(215deg); top: 55px; }
+.n6 {
+  transform: translateY(145px);
+}
 
-.r1 { left: 30px; transform: rotate(35deg); }
-.r2 { left: 30px; transform: rotate(15deg); top: 38px; }
-.r3 { left: 30px; transform: rotate(-15deg); top: 47px; }
-.r4 { left: 30px; transform: rotate(-35deg); top: 55px; }
+.n7 {
+  transform: rotate(210deg) translateY(-145px) rotate(-210deg);
+}
 
-/* Clock hands */
+.n8 {
+  transform: rotate(240deg) translateY(-145px) rotate(-240deg);
+}
+
+.n9 {
+  transform: rotate(270deg) translateY(-145px) rotate(-270deg);
+}
+
+.n10 {
+  transform: rotate(300deg) translateY(-145px) rotate(-300deg);
+}
+
+.n11 {
+  transform: rotate(330deg) translateY(-145px) rotate(-330deg);
+}
+
+/* -------------------------
+   CLOCK HANDS
+------------------------- */
+
 .hand {
   position: absolute;
   left: 50%;
   bottom: 50%;
-  width: 4px;
-  border-radius: 10px;
-  background: white;
+
   transform-origin: 50% 100%;
-  z-index: 4;
+
+  border-radius: 20px;
+  background: #fff;
+
+  z-index: 20;
 }
 
 .hour {
-  height: 75px;
+  width: 5px;
+  height: 78px;
 }
 
 .minute {
+  width: 4px;
   height: 105px;
-  width: 3px;
 }
 
 .second {
-  height: 125px;
   width: 2px;
-  background: #eee;
+  height: 132px;
+  background: rgba(255,255,255,.9);
 }
+
+/* -------------------------
+   SPIDER
+------------------------- */
+
+.spider {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 115px;
+  height: 125px;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 30;
+}
+
+/* spider body */
+
+.spider-body {
+  position: absolute;
+
+  left: 50%;
+  top: 42px;
+
+  width: 27px;
+  height: 55px;
+
+  transform: translateX(-50%);
+
+  background: white;
+
+  border-radius:
+    55% 55%
+    48% 48%;
+
+  box-shadow:
+    0 0 3px rgba(255,255,255,.7);
+}
+
+/* spider head */
+
+.spider-head {
+  position: absolute;
+
+  left: 50%;
+  top: 20px;
+
+  width: 30px;
+  height: 30px;
+
+  transform: translateX(-50%);
+
+  background: white;
+  border-radius: 50%;
+}
+
+/* tiny eyes */
+
+.spider-head::before,
+.spider-head::after {
+  content: "";
+
+  position: absolute;
+
+  width: 4px;
+  height: 4px;
+
+  top: 10px;
+
+  background: #7c4107;
+
+  border-radius: 50%;
+}
+
+.spider-head::before {
+  left: 7px;
+}
+
+.spider-head::after {
+  right: 7px;
+}
+
+/* -------------------------
+   SPIDER LEGS
+------------------------- */
+
+.leg {
+  position: absolute;
+
+  width: 67px;
+  height: 3px;
+
+  background: white;
+
+  border-radius: 10px;
+
+  left: 56px;
+  top: 51px;
+
+  transform-origin: 0 50%;
+
+  box-shadow:
+    0 0 2px rgba(255,255,255,.8);
+}
+
+/* left legs */
+
+.leg1 {
+  transform: rotate(155deg);
+}
+
+.leg2 {
+  transform: rotate(170deg);
+  top: 62px;
+}
+
+.leg3 {
+  transform: rotate(195deg);
+  top: 73px;
+}
+
+.leg4 {
+  transform: rotate(215deg);
+  top: 84px;
+}
+
+/* right legs */
+
+.leg5 {
+  transform: rotate(25deg);
+}
+
+.leg6 {
+  transform: rotate(10deg);
+  top: 62px;
+}
+
+.leg7 {
+  transform: rotate(-15deg);
+  top: 73px;
+}
+
+.leg8 {
+  transform: rotate(-35deg);
+  top: 84px;
+}
+
+/* moving spider animation */
+
+.spider .leg1,
+.spider .leg4,
+.spider .leg6,
+.spider .leg7 {
+  animation: legMove1 .8s ease-in-out infinite alternate;
+}
+
+.spider .leg2,
+.spider .leg3,
+.spider .leg5,
+.spider .leg8 {
+  animation: legMove2 .8s ease-in-out infinite alternate;
+}
+
+@keyframes legMove1 {
+  from {
+    margin-left: 0;
+  }
+
+  to {
+    margin-left: 7px;
+  }
+}
+
+@keyframes legMove2 {
+  from {
+    margin-left: 7px;
+  }
+
+  to {
+    margin-left: 0;
+  }
+}
+
+/* spider breathing */
+
+.spider-body,
+.spider-head {
+  animation: spiderBody 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spiderBody {
+  from {
+    transform: translateX(-50%) scale(1);
+  }
+
+  to {
+    transform: translateX(-50%) scale(1.03);
+  }
+}
+
+/* center dot */
 
 .center {
   position: absolute;
+
   left: 50%;
   top: 50%;
-  width: 12px;
-  height: 12px;
+
+  width: 11px;
+  height: 11px;
+
   transform: translate(-50%, -50%);
+
   background: white;
   border-radius: 50%;
-  z-index: 10;
+
+  z-index: 40;
 }
 
-@media (max-width: 400px) {
-  .clock {
-    transform: scale(.85);
+/* mobile */
+
+@media (max-width: 500px) {
+
+  .title {
+    height: 100px;
+    font-size: 28px;
   }
 
-  h1 {
-    font-size: 27px;
+  .stage {
+    height: calc(100vh - 100px);
+  }
+
+  .clock {
+    transform:
+      translate(-50%, -47%)
+      scale(.88);
+  }
+
+  .pattern {
+    transform:
+      translate(-50%, -45%)
+      scale(.85);
+  }
+}
+
+@media (max-width: 380px) {
+
+  .clock {
+    transform:
+      translate(-50%, -47%)
+      scale(.78);
+  }
+
+  .pattern {
+    transform:
+      translate(-50%, -45%)
+      scale(.75);
   }
 }
 </style>
@@ -192,67 +530,105 @@ h1 {
 
 <body>
 
-<div class="clock-area">
+<div class="page">
 
-  <h1>Spider Clock</h1>
+  <div class="title">
+    Spider Clock
+  </div>
 
-  <div class="clock">
+  <div class="stage">
 
-    <div class="number n12">12</div>
-    <div class="number n1">1</div>
-    <div class="number n2">2</div>
-    <div class="number n3">3</div>
-    <div class="number n4">4</div>
-    <div class="number n5">5</div>
-    <div class="number n6">6</div>
-    <div class="number n7">7</div>
-    <div class="number n8">8</div>
-    <div class="number n9">9</div>
-    <div class="number n10">10</div>
-    <div class="number n11">11</div>
+    <!-- BACKGROUND PATTERN -->
 
-    <div class="hand hour" id="hour"></div>
-    <div class="hand minute" id="minute"></div>
-    <div class="hand second" id="second"></div>
+    <div class="pattern">
 
-    <div class="spider">
+      <div class="flower f1"></div>
+      <div class="flower f2"></div>
+      <div class="flower f3"></div>
+      <div class="flower f4"></div>
 
-      <div class="head">
-        <div class="eye left"></div>
-        <div class="eye right"></div>
-      </div>
-
-      <div class="body"></div>
-
-      <div class="leg l1"></div>
-      <div class="leg l2"></div>
-      <div class="leg l3"></div>
-      <div class="leg l4"></div>
-
-      <div class="leg r1"></div>
-      <div class="leg r2"></div>
-      <div class="leg r3"></div>
-      <div class="leg r4"></div>
+      <div class="center-pattern"></div>
 
     </div>
 
-    <div class="center"></div>
+    <!-- CLOCK -->
+
+    <div class="clock">
+
+      <!-- NUMBERS -->
+
+      <div class="number n12">12</div>
+      <div class="number n1">1</div>
+      <div class="number n2">2</div>
+      <div class="number n3">3</div>
+      <div class="number n4">4</div>
+      <div class="number n5">5</div>
+      <div class="number n6">6</div>
+      <div class="number n7">7</div>
+      <div class="number n8">8</div>
+      <div class="number n9">9</div>
+      <div class="number n10">10</div>
+      <div class="number n11">11</div>
+
+      <!-- CLOCK HANDS -->
+
+      <div class="hand hour" id="hour"></div>
+      <div class="hand minute" id="minute"></div>
+      <div class="hand second" id="second"></div>
+
+      <!-- SPIDER -->
+
+      <div class="spider">
+
+        <div class="spider-head"></div>
+        <div class="spider-body"></div>
+
+        <span class="leg leg1"></span>
+        <span class="leg leg2"></span>
+        <span class="leg leg3"></span>
+        <span class="leg leg4"></span>
+
+        <span class="leg leg5"></span>
+        <span class="leg leg6"></span>
+        <span class="leg leg7"></span>
+        <span class="leg leg8"></span>
+
+      </div>
+
+      <div class="center"></div>
+
+    </div>
 
   </div>
 </div>
 
 <script>
+
 function updateClock() {
 
   const now = new Date();
 
   const seconds = now.getSeconds();
-  const minutes = now.getMinutes();
-  const hours = now.getHours() % 12;
+  const milliseconds = now.getMilliseconds();
 
-  const secondAngle = seconds * 6;
-  const minuteAngle = minutes * 6 + seconds * 0.1;
-  const hourAngle = hours * 30 + minutes * 0.5;
+  const minutes =
+    now.getMinutes() +
+    seconds / 60;
+
+  const hours =
+    (now.getHours() % 12) +
+    minutes / 60;
+
+  /* smooth movement */
+
+  const secondAngle =
+    (seconds + milliseconds / 1000) * 6;
+
+  const minuteAngle =
+    minutes * 6;
+
+  const hourAngle =
+    hours * 30;
 
   document.getElementById("second").style.transform =
     `translateX(-50%) rotate(${secondAngle}deg)`;
@@ -262,10 +638,12 @@ function updateClock() {
 
   document.getElementById("hour").style.transform =
     `translateX(-50%) rotate(${hourAngle}deg)`;
+
+  requestAnimationFrame(updateClock);
 }
 
 updateClock();
-setInterval(updateClock, 1000);
+
 </script>
 
 </body>
