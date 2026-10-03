@@ -3,646 +3,542 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spider Clock</title>
+
+<title>MANXWEAR — Move Different</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-html, body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
+body{
+    background:#0b0b0b;
+    color:#fff;
 }
 
-body {
-  overflow: hidden;
-  background: #000;
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
+header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    border-bottom:1px solid #222;
+    position:sticky;
+    top:0;
+    background:#0b0b0b;
+    z-index:100;
 }
 
-.page {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #000;
+.logo{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:2px;
 }
 
-.title {
-  height: 115px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 31px;
-  font-weight: 800;
-  letter-spacing: -1px;
+.cart{
+    font-size:22px;
+    cursor:pointer;
 }
 
-.stage {
-  position: relative;
-  width: 100%;
-  height: calc(100vh - 115px);
-  min-height: 520px;
-  max-width: 750px;
-  overflow: hidden;
-
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(190,100,20,.25),
-      transparent 42%
-    ),
-    linear-gradient(
-      135deg,
-      #a84b00 0%,
-      #8c4100 45%,
-      #633d08 100%
-    );
+.hero{
+    min-height:80vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 20px;
+    background:
+        radial-gradient(circle at center,#252525 0%,#0b0b0b 60%);
 }
 
-/* -------------------------
-   DECORATIVE BACKGROUND
-------------------------- */
-
-.pattern {
-  position: absolute;
-  width: 430px;
-  height: 430px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -45%);
-  opacity: .20;
+.hero h1{
+    font-size:clamp(55px,15vw,120px);
+    font-weight:900;
+    letter-spacing:-5px;
 }
 
-.flower {
-  position: absolute;
-  width: 115px;
-  height: 115px;
-  border: 2px solid rgba(255,255,255,.42);
-  border-radius: 50%;
-  background:
-    repeating-conic-gradient(
-      from 0deg,
-      transparent 0deg 12deg,
-      rgba(255,255,255,.15) 13deg 18deg,
-      transparent 19deg 30deg
-    );
+.hero p{
+    margin-top:15px;
+    color:#aaa;
+    letter-spacing:4px;
 }
 
-.flower::before,
-.flower::after {
-  content: "";
-  position: absolute;
-  inset: 13px;
-  border: 2px solid rgba(255,255,255,.28);
-  border-radius: 50%;
+.shop-btn{
+    display:inline-block;
+    margin-top:30px;
+    padding:14px 30px;
+    background:#fff;
+    color:#000;
+    text-decoration:none;
+    font-weight:bold;
+    border-radius:4px;
 }
 
-.flower::after {
-  inset: 31px;
+.section{
+    padding:50px 20px;
+    max-width:1200px;
+    margin:auto;
 }
 
-.f1 {
-  left: 75px;
-  top: 70px;
+.section h2{
+    font-size:30px;
+    margin-bottom:25px;
 }
 
-.f2 {
-  right: 70px;
-  top: 75px;
-  transform: scale(.8);
+.filters{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
 }
 
-.f3 {
-  left: 115px;
-  bottom: 65px;
-  transform: scale(.65);
+.filters button{
+    background:#151515;
+    color:#fff;
+    border:1px solid #333;
+    padding:10px 18px;
+    cursor:pointer;
 }
 
-.f4 {
-  right: 105px;
-  bottom: 55px;
-  transform: scale(.55);
+.filters button:hover{
+    background:#fff;
+    color:#000;
 }
 
-.center-pattern {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 160px;
-  height: 160px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-
-  background:
-    repeating-conic-gradient(
-      rgba(255,255,255,.12) 0deg 8deg,
-      transparent 8deg 16deg
-    );
-
-  border: 2px solid rgba(255,255,255,.18);
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
 }
 
-/* -------------------------
-   CLOCK
-------------------------- */
-
-.clock {
-  position: absolute;
-  width: 340px;
-  height: 340px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -47%);
+.product{
+    background:#141414;
+    border:1px solid #222;
+    padding-bottom:20px;
+    transition:.2s;
 }
 
-/* numbers */
-
-.number {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 42px;
-  height: 42px;
-
-  margin-left: -21px;
-  margin-top: -21px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  color: rgba(255,255,255,.40);
-  font-size: 22px;
-  font-weight: 500;
-  text-shadow: 0 0 5px rgba(255,255,255,.15);
+.product:hover{
+    transform:translateY(-5px);
 }
 
-/* positions */
-
-.n12 { transform: translateY(-145px); }
-
-.n1 {
-  transform: rotate(30deg) translateY(-145px) rotate(-30deg);
+.product img{
+    width:100%;
+    aspect-ratio:1/1;
+    object-fit:cover;
+    background:#222;
 }
 
-.n2 {
-  transform: rotate(60deg) translateY(-145px) rotate(-60deg);
+.product-info{
+    padding:15px;
 }
 
-.n3 {
-  transform: rotate(90deg) translateY(-145px) rotate(-90deg);
+.product h3{
+    font-size:18px;
+    margin-bottom:8px;
 }
 
-.n4 {
-  transform: rotate(120deg) translateY(-145px) rotate(-120deg);
+.price{
+    font-weight:bold;
+    margin-bottom:12px;
 }
 
-.n5 {
-  transform: rotate(150deg) translateY(-145px) rotate(-150deg);
+.product button{
+    width:100%;
+    padding:12px;
+    border:0;
+    background:#fff;
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.n6 {
-  transform: translateY(145px);
+.about{
+    text-align:center;
+    color:#aaa;
+    line-height:1.7;
 }
 
-.n7 {
-  transform: rotate(210deg) translateY(-145px) rotate(-210deg);
+footer{
+    border-top:1px solid #222;
+    text-align:center;
+    padding:30px 20px;
+    color:#777;
+    margin-top:40px;
 }
 
-.n8 {
-  transform: rotate(240deg) translateY(-145px) rotate(-240deg);
+#cartBox{
+    position:fixed;
+    right:-100%;
+    top:0;
+    width:330px;
+    max-width:90%;
+    height:100%;
+    background:#111;
+    z-index:200;
+    padding:25px;
+    transition:.3s;
+    border-left:1px solid #333;
 }
 
-.n9 {
-  transform: rotate(270deg) translateY(-145px) rotate(-270deg);
+#cartBox.active{
+    right:0;
 }
 
-.n10 {
-  transform: rotate(300deg) translateY(-145px) rotate(-300deg);
+#cartBox h2{
+    margin-bottom:20px;
 }
 
-.n11 {
-  transform: rotate(330deg) translateY(-145px) rotate(-330deg);
+.close{
+    float:right;
+    cursor:pointer;
+    font-size:22px;
 }
 
-/* -------------------------
-   CLOCK HANDS
-------------------------- */
-
-.hand {
-  position: absolute;
-  left: 50%;
-  bottom: 50%;
-
-  transform-origin: 50% 100%;
-
-  border-radius: 20px;
-  background: #fff;
-
-  z-index: 20;
+.cart-item{
+    border-bottom:1px solid #333;
+    padding:12px 0;
 }
 
-.hour {
-  width: 5px;
-  height: 78px;
-}
-
-.minute {
-  width: 4px;
-  height: 105px;
-}
-
-.second {
-  width: 2px;
-  height: 132px;
-  background: rgba(255,255,255,.9);
-}
-
-/* -------------------------
-   SPIDER
-------------------------- */
-
-.spider {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  width: 115px;
-  height: 125px;
-
-  transform: translate(-50%, -50%);
-
-  z-index: 30;
-}
-
-/* spider body */
-
-.spider-body {
-  position: absolute;
-
-  left: 50%;
-  top: 42px;
-
-  width: 27px;
-  height: 55px;
-
-  transform: translateX(-50%);
-
-  background: white;
-
-  border-radius:
-    55% 55%
-    48% 48%;
-
-  box-shadow:
-    0 0 3px rgba(255,255,255,.7);
-}
-
-/* spider head */
-
-.spider-head {
-  position: absolute;
-
-  left: 50%;
-  top: 20px;
-
-  width: 30px;
-  height: 30px;
-
-  transform: translateX(-50%);
-
-  background: white;
-  border-radius: 50%;
-}
-
-/* tiny eyes */
-
-.spider-head::before,
-.spider-head::after {
-  content: "";
-
-  position: absolute;
-
-  width: 4px;
-  height: 4px;
-
-  top: 10px;
-
-  background: #7c4107;
-
-  border-radius: 50%;
-}
-
-.spider-head::before {
-  left: 7px;
-}
-
-.spider-head::after {
-  right: 7px;
-}
-
-/* -------------------------
-   SPIDER LEGS
-------------------------- */
-
-.leg {
-  position: absolute;
-
-  width: 67px;
-  height: 3px;
-
-  background: white;
-
-  border-radius: 10px;
-
-  left: 56px;
-  top: 51px;
-
-  transform-origin: 0 50%;
-
-  box-shadow:
-    0 0 2px rgba(255,255,255,.8);
-}
-
-/* left legs */
-
-.leg1 {
-  transform: rotate(155deg);
-}
-
-.leg2 {
-  transform: rotate(170deg);
-  top: 62px;
-}
-
-.leg3 {
-  transform: rotate(195deg);
-  top: 73px;
-}
-
-.leg4 {
-  transform: rotate(215deg);
-  top: 84px;
-}
-
-/* right legs */
-
-.leg5 {
-  transform: rotate(25deg);
-}
-
-.leg6 {
-  transform: rotate(10deg);
-  top: 62px;
-}
-
-.leg7 {
-  transform: rotate(-15deg);
-  top: 73px;
-}
-
-.leg8 {
-  transform: rotate(-35deg);
-  top: 84px;
-}
-
-/* moving spider animation */
-
-.spider .leg1,
-.spider .leg4,
-.spider .leg6,
-.spider .leg7 {
-  animation: legMove1 .8s ease-in-out infinite alternate;
-}
-
-.spider .leg2,
-.spider .leg3,
-.spider .leg5,
-.spider .leg8 {
-  animation: legMove2 .8s ease-in-out infinite alternate;
-}
-
-@keyframes legMove1 {
-  from {
-    margin-left: 0;
-  }
-
-  to {
-    margin-left: 7px;
-  }
-}
-
-@keyframes legMove2 {
-  from {
-    margin-left: 7px;
-  }
-
-  to {
-    margin-left: 0;
-  }
-}
-
-/* spider breathing */
-
-.spider-body,
-.spider-head {
-  animation: spiderBody 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes spiderBody {
-  from {
-    transform: translateX(-50%) scale(1);
-  }
-
-  to {
-    transform: translateX(-50%) scale(1.03);
-  }
-}
-
-/* center dot */
-
-.center {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  width: 11px;
-  height: 11px;
-
-  transform: translate(-50%, -50%);
-
-  background: white;
-  border-radius: 50%;
-
-  z-index: 40;
-}
-
-/* mobile */
-
-@media (max-width: 500px) {
-
-  .title {
-    height: 100px;
-    font-size: 28px;
-  }
-
-  .stage {
-    height: calc(100vh - 100px);
-  }
-
-  .clock {
-    transform:
-      translate(-50%, -47%)
-      scale(.88);
-  }
-
-  .pattern {
-    transform:
-      translate(-50%, -45%)
-      scale(.85);
-  }
-}
-
-@media (max-width: 380px) {
-
-  .clock {
-    transform:
-      translate(-50%, -47%)
-      scale(.78);
-  }
-
-  .pattern {
-    transform:
-      translate(-50%, -45%)
-      scale(.75);
-  }
+.checkout{
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    background:#fff;
+    color:#000;
+    border:0;
+    font-weight:bold;
+    cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div class="page">
+<header>
+    <div class="logo">MANXWEAR</div>
 
-  <div class="title">
-    Spider Clock
-  </div>
+    <div class="cart" onclick="openCart()">
+        🛒 <span id="cartCount">0</span>
+    </div>
+</header>
 
-  <div class="stage">
 
-    <!-- BACKGROUND PATTERN -->
+<section class="hero">
 
-    <div class="pattern">
+    <div>
+        <h1>MANXWEAR</h1>
 
-      <div class="flower f1"></div>
-      <div class="flower f2"></div>
-      <div class="flower f3"></div>
-      <div class="flower f4"></div>
+        <p>MOVE DIFFERENT</p>
 
-      <div class="center-pattern"></div>
+        <a href="#shop" class="shop-btn">
+            SHOP NOW
+        </a>
+    </div>
+
+</section>
+
+
+<section class="section" id="shop">
+
+    <h2>SHOP</h2>
+
+    <div class="filters">
+
+        <button onclick="filterProducts('all')">
+            ALL
+        </button>
+
+        <button onclick="filterProducts('tshirt')">
+            T-SHIRTS
+        </button>
+
+        <button onclick="filterProducts('hoodie')">
+            HOODIES
+        </button>
+
+        <button onclick="filterProducts('shirt')">
+            SHIRTS
+        </button>
 
     </div>
 
-    <!-- CLOCK -->
 
-    <div class="clock">
+    <div class="products" id="products">
 
-      <!-- NUMBERS -->
+        <!-- PRODUCT 1 -->
 
-      <div class="number n12">12</div>
-      <div class="number n1">1</div>
-      <div class="number n2">2</div>
-      <div class="number n3">3</div>
-      <div class="number n4">4</div>
-      <div class="number n5">5</div>
-      <div class="number n6">6</div>
-      <div class="number n7">7</div>
-      <div class="number n8">8</div>
-      <div class="number n9">9</div>
-      <div class="number n10">10</div>
-      <div class="number n11">11</div>
+        <div class="product" data-category="tshirt">
 
-      <!-- CLOCK HANDS -->
+            <img src="IMG_0974.jpeg" alt="MANXWEAR Essential Tee">
 
-      <div class="hand hour" id="hour"></div>
-      <div class="hand minute" id="minute"></div>
-      <div class="hand second" id="second"></div>
+            <div class="product-info">
 
-      <!-- SPIDER -->
+                <h3>Essential Tee</h3>
 
-      <div class="spider">
+                <div class="price">
+                    ₹1,499
+                </div>
 
-        <div class="spider-head"></div>
-        <div class="spider-body"></div>
+                <button onclick="addToCart('Essential Tee',1499)">
+                    ADD TO CART
+                </button>
 
-        <span class="leg leg1"></span>
-        <span class="leg leg2"></span>
-        <span class="leg leg3"></span>
-        <span class="leg leg4"></span>
+            </div>
 
-        <span class="leg leg5"></span>
-        <span class="leg leg6"></span>
-        <span class="leg leg7"></span>
-        <span class="leg leg8"></span>
+        </div>
 
-      </div>
 
-      <div class="center"></div>
+        <!-- PRODUCT 2 -->
+
+        <div class="product" data-category="hoodie">
+
+            <img src="IMG_0993.webp" alt="MANXWEAR Hoodie">
+
+            <div class="product-info">
+
+                <h3>Core Hoodie</h3>
+
+                <div class="price">
+                    ₹1,099
+                </div>
+
+                <button onclick="addToCart('Core Hoodie',1099)">
+                    ADD TO CART
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCT 3 -->
+
+        <div class="product" data-category="shirt">
+
+            <img src="IMG_0992.webp" alt="MANXWEAR Oversized Shirt">
+
+            <div class="product-info">
+
+                <h3>Oversized Shirt</h3>
+
+                <div class="price">
+                    ₹999
+                </div>
+
+                <button onclick="addToCart('Oversized Shirt',999)">
+                    ADD TO CART
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCT 4 -->
+
+        <div class="product" data-category="shirt">
+
+            <img src="R⤓Download.jpeg" alt="MANXWEAR Black Shirt">
+
+            <div class="product-info">
+
+                <h3>Signature Black Shirt</h3>
+
+                <div class="price">
+                    ₹1,999
+                </div>
+
+                <button onclick="addToCart('Signature Black Shirt',1999)">
+                    ADD TO CART
+                </button>
+
+            </div>
+
+        </div>
+
 
     </div>
 
-  </div>
+</section>
+
+
+<section class="section">
+
+    <h2>ABOUT MANXWEAR</h2>
+
+    <div class="about">
+
+        <p>
+            Modern essentials for people who move different.
+            Clean silhouettes. Bold attitude.
+            Built for everyday streetwear.
+        </p>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    © 2026 MANXWEAR. All Rights Reserved.
+
+</footer>
+
+
+<!-- CART -->
+
+<div id="cartBox">
+
+    <span class="close" onclick="closeCart()">✕</span>
+
+    <h2>Your Cart</h2>
+
+    <div id="cartItems"></div>
+
+    <h3>
+        Total: ₹<span id="cartTotal">0</span>
+    </h3>
+
+    <button class="checkout" onclick="checkout()">
+        PLACE COD ORDER
+    </button>
+
 </div>
+
 
 <script>
 
-function updateClock() {
+let cart = [];
 
-  const now = new Date();
+function addToCart(name, price){
 
-  const seconds = now.getSeconds();
-  const milliseconds = now.getMilliseconds();
+    cart.push({
+        name:name,
+        price:price
+    });
 
-  const minutes =
-    now.getMinutes() +
-    seconds / 60;
+    updateCart();
 
-  const hours =
-    (now.getHours() % 12) +
-    minutes / 60;
-
-  /* smooth movement */
-
-  const secondAngle =
-    (seconds + milliseconds / 1000) * 6;
-
-  const minuteAngle =
-    minutes * 6;
-
-  const hourAngle =
-    hours * 30;
-
-  document.getElementById("second").style.transform =
-    `translateX(-50%) rotate(${secondAngle}deg)`;
-
-  document.getElementById("minute").style.transform =
-    `translateX(-50%) rotate(${minuteAngle}deg)`;
-
-  document.getElementById("hour").style.transform =
-    `translateX(-50%) rotate(${hourAngle}deg)`;
-
-  requestAnimationFrame(updateClock);
+    alert(name + " added to cart!");
 }
 
-updateClock();
+
+function updateCart(){
+
+    document.getElementById("cartCount").innerText =
+        cart.length;
+
+    let items = "";
+
+    let total = 0;
+
+    cart.forEach((item,index)=>{
+
+        total += item.price;
+
+        items += `
+        <div class="cart-item">
+
+            ${item.name}
+            <br>
+
+            ₹${item.price}
+
+            <button
+                onclick="removeItem(${index})"
+                style="
+                float:right;
+                background:none;
+                color:white;
+                border:0;
+                cursor:pointer;">
+                ✕
+            </button>
+
+        </div>
+        `;
+
+    });
+
+    document.getElementById("cartItems").innerHTML =
+        items || "Your cart is empty.";
+
+    document.getElementById("cartTotal").innerText =
+        total;
+}
+
+
+function removeItem(index){
+
+    cart.splice(index,1);
+
+    updateCart();
+}
+
+
+function openCart(){
+
+    document
+    .getElementById("cartBox")
+    .classList.add("active");
+
+}
+
+
+function closeCart(){
+
+    document
+    .getElementById("cartBox")
+    .classList.remove("active");
+
+}
+
+
+function filterProducts(category){
+
+    let products =
+        document.querySelectorAll(".product");
+
+    products.forEach(product=>{
+
+        if(
+            category === "all" ||
+            product.dataset.category === category
+        ){
+
+            product.style.display = "block";
+
+        }else{
+
+            product.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+function checkout(){
+
+    if(cart.length === 0){
+
+        alert("Your cart is empty.");
+
+        return;
+
+    }
+
+    alert(
+        "COD order system ready. Connect your Google Form/order system here."
+    );
+
+}
 
 </script>
 
